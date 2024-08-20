@@ -9,5 +9,20 @@
     <h1>Iniciando</h1>
     <hr>
     <h3>Questionário 1:</h3>
-</body>
+
+    <p>Nome: <%= nome %></p>
+    <p>Desenvolvedor em: <%= dev %></p>
+    <p>Empresa: <%= company %></p>
+    <p>Salario: <%= salary %></p> 
+
+    <br><br>
+
+    <% produtos.forEach(function(produto){ %>
+        <p>Nome: <%= produto.nome %></p>
+        <p>Preço: <%= produto.preco %></p>
+        <p>Quantidade: <%= produto.quantidade %></p>
+        <hr>
+    <% }) %>
+    
+    </body>
 </html>
