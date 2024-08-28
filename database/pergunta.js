@@ -15,7 +15,7 @@ const pergunta = connection.define("pergunta",{
     }
 });
 
-pergunta.sync({force: false}).then(()=>{
+pergunta.sync({force: false}).then(()=>{ // Force: false == Create table pergunta if not exist
     console.log("Tabela de perguntas criada com sucesso!")
 })
 
