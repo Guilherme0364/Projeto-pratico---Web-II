@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const connection = require("./database/database.js");
 const perguntaModel = require("./database/pergunta.js");
+const respostaModel = require("./database/resposta.js");
 const app = express();
 
 // Renderizador de HTML
@@ -34,9 +35,58 @@ app.get("/question", (req, res) => {
     res.render('question');
 });
 
+app.get("/question/:id", (req, res) => {
+    var id = req.params.id;
+
+    perguntaModel.findAll({ 
+        where: { id: id } })
+        order: [["id", "DESC"]]
+        .then((pergunta) => {
+        if(pergunta != undefined){
+            res.render('detalhepergunta',{
+                pergunta: pergunta,
+                respostas: respostas
+            })
+        } else {
+            res.redirect("/");
+        }
+    }).catch((error) => {
+        console.error("Erro ao buscar pergunta:", error);
+        res.status(500).send("Erro ao buscar pergunta.");
+    });
+});
+
+app.post("/responder", (req, res) => {
+    var perguntaId = req.body.pergunta;
+    var corpo = req.body.corpo;
+
+    respostaModel.create({
+        corpo: corpo,
+        perguntaId: perguntaId
+    }).then(() => {
+        res.redirect("/question/" + perguntaId);
+    }).catch((error) => {
+        console.error("Erro ao salvar a resposta:", error);
+        res.status(500).send("Erro ao salvar a resposta.");
+    });
+});
+
+app.get("/resposta/delete/:id", (req, res) => {
+    var id = req.params.id;
+
+    respostaModel.destroy({
+        where: { id: id }
+    }).then(() => {
+        res.redirect("back");
+    }).catch((error) => {
+        console.error("Erro ao excluir a resposta:", error);
+        res.status(500).send("Erro ao excluir a resposta.");
+    });
+});
+
 // Rota para a página inicial
 app.get("/", (req, res) => {
-    perguntaModel.findAll({ raw: true }).then(perguntas => {
+    perguntaModel.findAll({ raw: true, order: [["id", "DESC"]] }).then((perguntas) => {
         // Renderiza a página com as perguntas
         res.render("app", {
             perguntas: perguntas
