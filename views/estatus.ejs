@@ -1,0 +1,27 @@
+<%- include('partials/header.ejs') %>
+<body>
+  <%- include('partials/navbar.ejs') %>
+  <div class="container mt-4">
+    <h1>Estatísticas</h1>
+    <hr>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card text-white bg-success mb-3">
+          <div class="card-header">Total de Perguntas</div>
+          <div class="card-body">
+            <h2 class="card-title"><%= totalPerguntas %></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card text-white bg-info mb-3">
+          <div class="card-header">Total de Respostas</div>
+          <div class="card-body">
+            <h2 class="card-title"><%= totalRespostas %></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<%- include('partials/footer.ejs') %>
+</body>

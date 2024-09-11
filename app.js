@@ -88,7 +88,7 @@ app.get("/resposta/delete/:id", (req, res) => {
 app.get("/", (req, res) => {
     perguntaModel.findAll({ raw: true, order: [["id", "DESC"]] }).then((perguntas) => {
         // Renderiza a página com as perguntas
-        res.render("app", {
+        res.render("index", {
             perguntas: perguntas
         });
     }).catch((error) => {
@@ -96,6 +96,56 @@ app.get("/", (req, res) => {
         res.status(500).send("Erro ao buscar perguntas.");
     });
 });
+
+app.get("/stats", async (req, res) => {
+    try {
+        const totalPerguntas = await perguntaModel.count();
+        const totalRespostas = await respostaModel.count();
+        res.render("stats", {
+            totalPerguntas: totalPerguntas,
+            totalRespostas: totalRespostas
+        });
+    } catch (error) {
+        console.error("Erro ao buscar estatísticas:", error);
+        res.status(500).send("Erro ao carregar estatísticas.");
+    }
+});
+
+
+app.get("/question/edit/:id", (req, res) => {
+    var id = req.params.id;
+
+    perguntaModel.findByPk(id)
+    .then(pergunta => {
+        if (pergunta != undefined) {
+            res.render("editQuestion", { pergunta: pergunta });
+        } else {
+            res.redirect("/");
+        }
+    }).catch(error => {
+        console.error("Erro ao buscar pergunta para edição:", error);
+        res.status(500).send("Erro ao buscar pergunta.");
+    });
+});
+
+
+app.post("/question/update", (req, res) => {
+    var id = req.body.id;
+    var titulo = req.body.titulo;
+    var descricao = req.body.descricao;
+
+    perguntaModel.update(
+        { titulo: titulo, descricao: descricao },
+        { where: { id: id } }
+    ).then(() => {
+        res.redirect("/question/" + id);
+    }).catch(error => {
+        console.error("Erro ao atualizar pergunta:", error);
+        res.status(500).send("Erro ao atualizar pergunta.");
+    });
+});
+
+
 
 // Conexão com o banco de dados
 connection

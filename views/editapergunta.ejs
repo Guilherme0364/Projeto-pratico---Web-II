@@ -1,0 +1,20 @@
+<%- include('partials/header.ejs') %>
+<body>
+  <%- include('partials/navbar.ejs') %>
+  <div class="container mt-4">
+    <h1>Editar Pergunta</h1>
+    <hr>
+    <form method="POST" action="/question/update">
+      <label for="titulo">Título</label>
+      <input type="text" name="titulo" class="form-control mb-2" value="<%= pergunta.titulo %>">
+      
+      <label for="descricao">Descrição</label>
+      <textarea name="descricao" class="form-control mb-3"><%= pergunta.descricao %></textarea>
+      
+      <input type="hidden" name="id" value="<%= pergunta.id %>">
+      
+      <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    </form>
+  </div>
+<%- include('partials/footer.ejs') %>
+</body>
